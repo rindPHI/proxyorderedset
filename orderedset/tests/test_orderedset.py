@@ -17,12 +17,12 @@ class TestOrderedset(unittest.TestCase):
         self.assertEqual("OrderedSet({3: None, 1: None, 2: None})", repr(OrderedSet([3, 1, 2])))
 
     def test_add(self):
-        s = OrderedSet([3, 1, 2])
+        s: OrderedSet[int] = OrderedSet([3, 1, 2])
         s.add(0)
         self.assertEqual(OrderedSet([3, 1, 2, 0]), s)
 
     def test_clear(self):
-        s = OrderedSet([3, 1, 2])
+        s: OrderedSet[int] = OrderedSet([3, 1, 2])
         s.clear()
         self.assertFalse(s)
         self.assertEqual(0, len(s))
