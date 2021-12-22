@@ -1,11 +1,11 @@
-from collections.abc import MutableSet, Set
-from typing import TypeVar, Generic, Optional, Iterable, Union, Iterator, Any, Dict, AbstractSet
+from collections.abc import Set, Iterator, Iterable
+from typing import TypeVar, Generic, Optional, Union, Any, Dict
 
 T = TypeVar("T")
 S = TypeVar("S")
 
 
-class OrderedSet(MutableSet, Generic[T]):
+class OrderedSet(Set[T], Generic[T]):
     def __init__(self, base: Optional[Union[Dict[T, None], Iterable[T]]] = None):
         self.the_dict: Dict[T, None]
         if not base:
@@ -96,46 +96,46 @@ class OrderedSet(MutableSet, Generic[T]):
     def __iter__(self) -> Iterator[T]:
         return iter(self.the_dict)
 
-    def __and__(self, s: AbstractSet[T]) -> 'OrderedSet[T]':
+    def __and__(self, s: Set[T]) -> 'OrderedSet[T]':
         return self.intersection(s)
 
-    def __iand__(self, s: AbstractSet[T]) -> 'OrderedSet[T]':
+    def __iand__(self, s: Set[T]) -> 'OrderedSet[T]':
         result = self.intersection(s)
         self.the_dict = result.the_dict
         return result
 
-    def __or__(self, s: AbstractSet[S]) -> 'OrderedSet[Union[T, S]]':
+    def __or__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         return self.union(s)
 
-    def __ior__(self, s: AbstractSet[S]) -> 'OrderedSet[Union[T, S]]':
+    def __ior__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         result = self.union(s)
         self.the_dict = result.the_dict
         return result
 
-    def __sub__(self, s: AbstractSet[Optional[T]]) -> 'OrderedSet[T]':
+    def __sub__(self, s: Set[Optional[T]]) -> 'OrderedSet[T]':
         return self.difference(s)
 
-    def __isub__(self, s: AbstractSet[Optional[T]]) -> 'OrderedSet[T]':
+    def __isub__(self, s: Set[Optional[T]]) -> 'OrderedSet[T]':
         result = self.difference(s)
         self.the_dict = result.the_dict
         return result
 
-    def __xor__(self, s: AbstractSet[S]) -> 'OrderedSet[Union[T, S]]':
+    def __xor__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         return self.symmetric_difference(s)
 
-    def __ixor__(self, s: AbstractSet[S]) -> 'OrderedSet[Union[T, S]]':
+    def __ixor__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         result = self.symmetric_difference(s)
         self.the_dict = result.the_dict
         return result
 
-    def __le__(self, s: AbstractSet[T]) -> bool:
+    def __le__(self, s: Set[T]) -> bool:
         return self.issubset(s)
 
-    def __lt__(self, s: AbstractSet[T]) -> bool:
+    def __lt__(self, s: Set[T]) -> bool:
         return self.issubset(s) and len(self) < len(s)
 
-    def __ge__(self, s: AbstractSet[T]) -> bool:
+    def __ge__(self, s: Set[T]) -> bool:
         return set(self) >= set(s)
 
-    def __gt__(self, s: AbstractSet[T]) -> bool:
+    def __gt__(self, s: Set[T]) -> bool:
         return set(self) > set(s)
