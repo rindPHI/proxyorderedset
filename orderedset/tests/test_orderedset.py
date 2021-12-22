@@ -13,6 +13,12 @@ class TestOrderedset(unittest.TestCase):
     def test_eq(self):
         self.assertTrue(OrderedSet([1, 2, 3]) == OrderedSet([1, 2, 3]))
 
+    def test_eq_set(self):
+        self.assertTrue({1, 2, 3} == OrderedSet([3, 1, 2]))
+
+    def test_eq_list(self):
+        self.assertTrue([3, 1, 2] == OrderedSet([3, 1, 2]))
+
     def test_ne(self):
         self.assertTrue(OrderedSet([1, 2, 3]) != OrderedSet([3, 2, 1]))
 

@@ -14,8 +14,12 @@ class OrderedSet(Generic[T]):
         else:
             self.the_dict = dict.fromkeys(base)
 
-    def __eq__(self, o: object) -> bool:
-        return isinstance(o, OrderedSet) and list(self.the_dict) == list(o.the_dict)
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, (OrderedSet, list)):
+            return len(self) == len(other) and list(self) == list(other)
+        elif isinstance(other, Set):
+            return set(self) == set(other)
+        return NotImplemented
 
     def __ne__(self, o: object) -> bool:
         return not self.__eq__(o)
