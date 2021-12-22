@@ -4,6 +4,12 @@ from orderedset import OrderedSet
 
 
 class TestOrderedset(unittest.TestCase):
+    def test_toset(self):
+        self.assertEqual({1, 2, 3}, set(OrderedSet([3, 1, 2])))
+
+    def test_tolist(self):
+        self.assertEqual([3, 1, 2], list(OrderedSet([3, 1, 2])))
+
     def test_eq(self):
         self.assertTrue(OrderedSet([1, 2, 3]) == OrderedSet([1, 2, 3]))
 

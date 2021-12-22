@@ -4,10 +4,8 @@ T = TypeVar("T")
 S = TypeVar("S")
 
 
-class OrderedSet(Generic[T], Set[T]):
+class OrderedSet(Generic[T]):
     def __init__(self, base: Optional[Union[Dict[T, None], Iterable[T]]] = None):
-        super().__init__()
-
         self.the_dict: Dict[T, None]
         if not base:
             self.the_dict = {}
@@ -56,10 +54,10 @@ class OrderedSet(Generic[T], Set[T]):
         return self.the_dict.keys().isdisjoint(s)
 
     def issubset(self, s: Iterable[Any]) -> bool:
-        return set(iter(self)).issubset(iter(s))
+        return set(self).issubset(set(s))
 
     def issuperset(self, s: Iterable[Any]) -> bool:
-        return set(iter(self)).issuperset(iter(s))
+        return set(self).issuperset(set(s))
 
     def pop(self) -> T:
         items = list(self.the_dict)
@@ -68,7 +66,7 @@ class OrderedSet(Generic[T], Set[T]):
         return result
 
     def remove(self, element: T) -> None:
-        del self.the_dict[element]
+        self.discard(element)
 
     def symmetric_difference(self, s: Iterable[T]) -> 'OrderedSet[T]':
         return OrderedSet(
@@ -132,7 +130,7 @@ class OrderedSet(Generic[T], Set[T]):
         return self.issubset(s) and len(self) < len(s)
 
     def __ge__(self, s: AbstractSet[object]) -> bool:
-        return set(iter(self)) >= set(iter(s))
+        return set(self) >= set(s)
 
     def __gt__(self, s: AbstractSet[object]) -> bool:
-        return set(iter(self)) > set(iter(s))
+        return set(self) > set(s)
