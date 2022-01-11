@@ -15,7 +15,7 @@ setup(
         "packaging>=21.3",
         "pluggy>=1.0.0",
         "py>=1.11.0",
-        "pyparsing>=3.0.6",
+        "pyparsing>=2.4.7",
         "pytest>=6.2.5",
         "pytest-html>=3.1.1",
         "pytest-metadata>=1.11.0",
