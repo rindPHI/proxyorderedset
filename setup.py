@@ -9,5 +9,16 @@ setup(
     author='Dominic Steinhoefel',
     author_email='dominic.steinhoefel@cispa.de',
     description='OrderedSet implementation as a proxy to dict',
-    install_requires=[],
+    install_requires=[
+        "attrs>=21.2.0",
+        "iniconfig>=1.1.1",
+        "packaging>=21.3",
+        "pluggy>=1.0.0",
+        "py>=1.11.0",
+        "pyparsing>=3.0.6",
+        "pytest>=6.2.5",
+        "pytest-html>=3.1.1",
+        "pytest-metadata>=1.11.0",
+        "toml>=0.10.2",
+     ],
 )
