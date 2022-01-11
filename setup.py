@@ -13,7 +13,7 @@ setup(
         "attrs>=21.2.0",
         "iniconfig>=1.1.1",
         "packaging>=21.0",
-        "pluggy>=1.0.0",
+        "pluggy>=0.12.0",
         "py>=1.11.0",
         "pyparsing>=2.4.7",
         "pytest>=6.2.5",
