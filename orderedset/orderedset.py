@@ -154,6 +154,9 @@ class FrozenOrderedSet(OrderedSet[T]):
         else:
             self.the_dict = frozendict.fromkeys(base)
 
+    def __hash__(self):
+        return 17 * hash(self.the_dict)
+
     def __repr__(self) -> str:
         return f"FrozenOrderedSet({repr(self.the_dict)})"
 
