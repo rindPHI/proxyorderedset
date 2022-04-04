@@ -1,6 +1,7 @@
 import unittest
 
 from orderedset import OrderedSet
+from orderedset.orderedset import FrozenOrderedSet
 
 
 class TestOrderedset(unittest.TestCase):
@@ -24,6 +25,9 @@ class TestOrderedset(unittest.TestCase):
 
     def test_str(self):
         self.assertEqual("{3, 1, 2}", str(OrderedSet([3, 1, 2])))
+
+    def test_str_frozen(self):
+        self.assertEqual("{3, 1, 2}", str(FrozenOrderedSet([3, 1, 2])))
 
     def test_repr(self):
         self.assertEqual("OrderedSet({3: None, 1: None, 2: None})", repr(OrderedSet([3, 1, 2])))
