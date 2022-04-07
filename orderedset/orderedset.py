@@ -1,4 +1,5 @@
 from collections.abc import Set, Iterator, Iterable
+from operator import __getitem__
 from typing import TypeVar, Generic, Optional, Any, Dict
 
 from frozendict import frozendict
@@ -32,6 +33,20 @@ class OrderedSet(Set[T], Generic[T]):
 
     def __repr__(self) -> str:
         return f"OrderedSet({repr(self.the_dict)})"
+
+    def __getitem__(self, item: int) -> T:
+        assert isinstance(item, int)
+        if len(self) >= item:
+            raise IndexError('list index out of range')
+
+        idx = 0
+        for elem in iter(self):
+            if idx == item:
+                return elem
+
+            idx += 1
+
+        assert False
 
     def add(self, element: T) -> None:
         self.the_dict = {**self.the_dict, **{element: None}}
