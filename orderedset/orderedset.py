@@ -1,6 +1,5 @@
 from collections.abc import Set, Iterator, Iterable
-from operator import __getitem__
-from typing import TypeVar, Generic, Optional, Any, Dict
+from typing import TypeVar, Generic, Optional, Any, Dict, Union
 
 from frozendict import frozendict
 
@@ -9,7 +8,7 @@ S = TypeVar("S")
 
 
 class OrderedSet(Set[T], Generic[T]):
-    def __init__(self, base: Optional[Dict[T, None] | Iterable[T]] = None):
+    def __init__(self, base: Optional[Union[Dict[T, None], Iterable[T]]] = None):
         self.the_dict: Dict[T, None]
         if not base:
             self.the_dict = {}
@@ -121,10 +120,10 @@ class OrderedSet(Set[T], Generic[T]):
         self.the_dict = result.the_dict
         return result
 
-    def __or__(self, s: Set[S]) -> 'OrderedSet[T| S]':
+    def __or__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         return self.union(s)
 
-    def __ior__(self, s: Set[S]) -> 'OrderedSet[T| S]':
+    def __ior__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         result = self.union(s)
         self.the_dict = result.the_dict
         return result
@@ -137,10 +136,10 @@ class OrderedSet(Set[T], Generic[T]):
         self.the_dict = result.the_dict
         return result
 
-    def __xor__(self, s: Set[S]) -> 'OrderedSet[T| S]':
+    def __xor__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         return self.symmetric_difference(s)
 
-    def __ixor__(self, s: Set[S]) -> 'OrderedSet[T| S]':
+    def __ixor__(self, s: Set[S]) -> 'OrderedSet[Union[T, S]]':
         result = self.symmetric_difference(s)
         self.the_dict = result.the_dict
         return result
@@ -159,7 +158,7 @@ class OrderedSet(Set[T], Generic[T]):
 
 
 class FrozenOrderedSet(OrderedSet[T]):
-    def __init__(self, base: Dict[T, None] | Iterable[T]):
+    def __init__(self, base: Union[Dict[T, None], Iterable[T]]):
         super().__init__()
         self.the_dict: frozendict[T, None]
         if not base:
@@ -225,10 +224,10 @@ class FrozenOrderedSet(OrderedSet[T]):
     def __iand__(self, s: Set[T]) -> 'FrozenOrderedSet[T]':
         raise NotImplementedError('Cannot update FrozenOrderedSet')
 
-    def __or__(self, s: Set[S]) -> 'FrozenOrderedSet[T | S]':
+    def __or__(self, s: Set[S]) -> 'FrozenOrderedSet[Union[T, S]]':
         return self.union(s)
 
-    def __ior__(self, s: Set[S]) -> 'FrozenOrderedSet[T | S]':
+    def __ior__(self, s: Set[S]) -> 'FrozenOrderedSet[Union[T, S]]':
         raise NotImplementedError('Cannot update FrozenOrderedSet')
 
     def __sub__(self, s: Set[Optional[T]]) -> 'FrozenOrderedSet[T]':
@@ -237,8 +236,8 @@ class FrozenOrderedSet(OrderedSet[T]):
     def __isub__(self, s: Set[Optional[T]]) -> 'FrozenOrderedSet[T]':
         raise NotImplementedError('Cannot update FrozenOrderedSet')
 
-    def __xor__(self, s: Set[S]) -> 'FrozenOrderedSet[T | S]':
+    def __xor__(self, s: Set[S]) -> 'FrozenOrderedSet[Union[T, S]]':
         return self.symmetric_difference(s)
 
-    def __ixor__(self, s: Set[S]) -> 'FrozenOrderedSet[T | S]':
+    def __ixor__(self, s: Set[S]) -> 'FrozenOrderedSet[Union[T, S]]':
         raise NotImplementedError('Cannot update FrozenOrderedSet')
