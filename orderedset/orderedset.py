@@ -35,7 +35,7 @@ class OrderedSet(Set[T], Generic[T]):
 
     def __getitem__(self, item: int) -> T:
         assert isinstance(item, int)
-        if len(self) >= item:
+        if item >= len(self):
             raise IndexError('list index out of range')
 
         idx = 0
@@ -187,7 +187,8 @@ class FrozenOrderedSet(OrderedSet[T]):
         return FrozenOrderedSet(frozendict({e: None for e in self.the_dict if e not in s}))
 
     def difference_update(self, s: Iterable[Any]) -> None:
-        self.the_dict = frozendict({e: None for e in self.the_dict if e not in s})
+        self.the_dict = frozendict(
+            {e: None for e in self.the_dict if e not in s})
 
     def discard(self, element: T) -> None:
         raise NotImplementedError('Cannot discard from FrozenOrderedSet')
@@ -196,7 +197,8 @@ class FrozenOrderedSet(OrderedSet[T]):
         return FrozenOrderedSet(frozendict({e: None for e in self.the_dict if e in s}))
 
     def intersection_update(self, s: Iterable[Any]) -> None:
-        self.the_dict = FrozenOrderedSet(frozendict({e: None for e in self.the_dict if e in s}))
+        self.the_dict = FrozenOrderedSet(frozendict(
+            {e: None for e in self.the_dict if e in s}))
 
     def pop(self) -> T:
         raise NotImplementedError('Cannot pop from FrozenOrderedSet')
