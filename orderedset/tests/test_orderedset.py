@@ -30,7 +30,8 @@ class TestOrderedset(unittest.TestCase):
         self.assertEqual("{3, 1, 2}", str(FrozenOrderedSet([3, 1, 2])))
 
     def test_repr(self):
-        self.assertEqual("OrderedSet({3: None, 1: None, 2: None})", repr(OrderedSet([3, 1, 2])))
+        self.assertEqual(
+            "OrderedSet({3: None, 1: None, 2: None})", repr(OrderedSet([3, 1, 2])))
 
     def test_add(self):
         s: OrderedSet[int] = OrderedSet([3, 1, 2])
@@ -152,6 +153,12 @@ class TestOrderedset(unittest.TestCase):
     def test_gt(self):
         self.assertGreater(OrderedSet([1, 2, 3]), OrderedSet([1, 2]))
         self.assertFalse(OrderedSet([1, 2, 3]) > OrderedSet([1, 2, 3]))
+
+    def test_get(self):
+        self.assertEqual(OrderedSet([1])[0], 1)
+        self.assertEqual(OrderedSet([3, 2, 1])[0], 3)
+        self.assertEqual(OrderedSet([3, 2, 1])[1], 2)
+        self.assertEqual(OrderedSet([3, 2, 1])[2], 1)
 
 
 if __name__ == '__main__':
