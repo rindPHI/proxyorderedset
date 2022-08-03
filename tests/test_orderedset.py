@@ -1,8 +1,7 @@
 import unittest
 
 from orderedset import OrderedSet
-from orderedset.orderedset import FrozenOrderedSet
-
+from orderedset import FrozenOrderedSet
 
 class TestOrderedset(unittest.TestCase):
     def test_toset(self):
