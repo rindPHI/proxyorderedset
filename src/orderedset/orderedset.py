@@ -1,3 +1,4 @@
+import itertools
 from collections.abc import Set, Iterator, Iterable
 from typing import TypeVar, Generic, Optional, Any, Dict, Union
 
@@ -33,19 +34,78 @@ class OrderedSet(Set[T], Generic[T]):
     def __repr__(self) -> str:
         return f"OrderedSet({repr(self.the_dict)})"
 
-    def __getitem__(self, item: int) -> T:
-        assert isinstance(item, int)
-        if item >= len(self):
-            raise IndexError('list index out of range')
+    def __getitem__(self, item: int | slice) -> T | 'OrderedSet[T]':
+        """
+        Returns the indexed item or subset.
 
-        idx = 0
-        for elem in iter(self):
-            if idx == item:
-                return elem
+        Example:
 
-            idx += 1
+        >>> s = OrderedSet([1, 2, 3, 4, 5])
 
-        assert False
+        We can access individual elements of the list, starting from index 0.
+
+        >>> s[1]
+        2
+
+        Negative indices work, too, just as for Python lists.
+
+        >>> s[-2]
+        4
+
+        If we access an item with a too high index, we receive and error.
+
+        >>> s[5]
+        Traceback (most recent call last):
+        ...
+        IndexError: list index out of range
+
+        Slices work, too:
+
+        >>> s[1:3]
+        OrderedSet({2: None, 3: None})
+
+        Their semantics is the same as for ordinary lists.
+
+        >>> list(s)[1:3] == list(s[1:3])
+        True
+
+        High indices are fine:
+
+        >>> s[1:700]
+        OrderedSet({2: None, 3: None, 4: None, 5: None})
+
+        However, negative indices are not allowed (this is different for lists!):
+
+        >>> s[-1:700]
+        Traceback (most recent call last):
+        ...
+        ValueError: Indices for islice() must be None or an integer: 0 <= x <= sys.maxsize.
+
+        :param item: An item index or a slice defining what item(s) to return.
+        :return: The indexed item or subset.
+        """
+        assert isinstance(item, int) or isinstance(item, slice)
+        if isinstance(item, int):
+            if item < 0:
+                item = len(self) + item
+
+            if item < 0 or item >= len(self):
+                raise IndexError("list index out of range")
+
+            idx = 0
+            for elem in iter(self):
+                if idx == item:
+                    return elem
+
+                idx += 1
+
+            assert False
+        else:
+            start = item.start or 0
+            stop = item.stop or 0
+            step = item.step or 1
+
+            return OrderedSet(itertools.islice(iter(self), start, stop, step))
 
     def add(self, element: T) -> None:
         self.the_dict = {**self.the_dict, **{element: None}}
