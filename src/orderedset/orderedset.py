@@ -102,7 +102,7 @@ class OrderedSet(Set[T], Generic[T]):
             assert False
         else:
             start = item.start or 0
-            stop = item.stop or 0
+            stop = item.stop or len(self)
             step = item.step or 1
 
             return OrderedSet(itertools.islice(iter(self), start, stop, step))
