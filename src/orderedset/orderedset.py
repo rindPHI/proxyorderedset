@@ -18,6 +18,9 @@ class OrderedSet(Set[T], Generic[T]):
         else:
             self.the_dict = dict.fromkeys(base)
 
+    def __call__(self, *args, **kwargs):
+        return OrderedSet(*args, **kwargs)
+
     def __eq__(self, other: object) -> bool:
         if isinstance(other, (OrderedSet, list)):
             return len(self) == len(other) and list(self) == list(other)
@@ -32,7 +35,7 @@ class OrderedSet(Set[T], Generic[T]):
         return "{" + ", ".join(list(map(str, self.the_dict))) + "}"
 
     def __repr__(self) -> str:
-        return f"OrderedSet({repr(self.the_dict)})"
+        return f"{type(self).__name__}({repr(self.the_dict)})"
 
     def __getitem__(self, item: int | slice) -> T | 'OrderedSet[T]':
         """
@@ -105,7 +108,7 @@ class OrderedSet(Set[T], Generic[T]):
             stop = item.stop or len(self)
             step = item.step or 1
 
-            return OrderedSet(itertools.islice(iter(self), start, stop, step))
+            return self(itertools.islice(iter(self), start, stop, step))
 
     def add(self, element: T) -> None:
         self.the_dict = {**self.the_dict, **{element: None}}
@@ -114,10 +117,10 @@ class OrderedSet(Set[T], Generic[T]):
         self.the_dict.clear()
 
     def copy(self) -> 'OrderedSet[T]':
-        return OrderedSet(self.the_dict.copy())
+        return self(self.the_dict.copy())
 
     def difference(self, s: Iterable[Any]) -> 'OrderedSet[T]':
-        return OrderedSet({e: None for e in self.the_dict if e not in s})
+        return self({e: None for e in self.the_dict if e not in s})
 
     def difference_update(self, s: Iterable[Any]) -> None:
         self.the_dict = {e: None for e in self.the_dict if e not in s}
@@ -126,7 +129,7 @@ class OrderedSet(Set[T], Generic[T]):
         del self.the_dict[element]
 
     def intersection(self, s: Iterable[Any]) -> 'OrderedSet[T]':
-        return OrderedSet({e: None for e in self.the_dict if e in s})
+        return self({e: None for e in self.the_dict if e in s})
 
     def intersection_update(self, s: Iterable[Any]) -> None:
         self.the_dict = {e: None for e in self.the_dict if e in s}
@@ -150,7 +153,7 @@ class OrderedSet(Set[T], Generic[T]):
         self.discard(element)
 
     def symmetric_difference(self, s: Iterable[T]) -> 'OrderedSet[T]':
-        return OrderedSet(
+        return self(
             dict.fromkeys([e for e in self.the_dict if e not in s] +
                           [e for e in s if e not in self.the_dict]))
 
@@ -158,7 +161,7 @@ class OrderedSet(Set[T], Generic[T]):
         self.the_dict = self.symmetric_difference(s).the_dict
 
     def union(self, s: Iterable[T]) -> 'OrderedSet[T]':
-        return OrderedSet({**self.the_dict, **dict.fromkeys(s)})
+        return self({**self.the_dict, **dict.fromkeys(s)})
 
     def update(self, s: Iterable[T]) -> None:
         self.the_dict = self.union(s).the_dict
@@ -228,11 +231,14 @@ class FrozenOrderedSet(OrderedSet[T]):
         else:
             self.the_dict = frozendict.fromkeys(base)
 
+    def __call__(self, *args, **kwargs):
+        return FrozenOrderedSet(*args, **kwargs)
+
     def __hash__(self):
         return 17 * hash(self.the_dict)
 
     def __repr__(self) -> str:
-        return f"FrozenOrderedSet({repr(self.the_dict)})"
+        return f"{type(self).__name__}({repr(self.the_dict)})"
 
     def add(self, element: T) -> None:
         raise NotImplementedError('Cannot add to FrozenOrderedSet')
@@ -241,10 +247,10 @@ class FrozenOrderedSet(OrderedSet[T]):
         raise NotImplementedError('Cannot clear FrozenOrderedSet')
 
     def copy(self) -> 'FrozenOrderedSet[T]':
-        return FrozenOrderedSet(self.the_dict)
+        return self(self.the_dict)
 
     def difference(self, s: Iterable[Any]) -> 'FrozenOrderedSet[T]':
-        return FrozenOrderedSet(frozendict({e: None for e in self.the_dict if e not in s}))
+        return self(frozendict({e: None for e in self.the_dict if e not in s}))
 
     def difference_update(self, s: Iterable[Any]) -> None:
         self.the_dict = frozendict(
@@ -254,10 +260,10 @@ class FrozenOrderedSet(OrderedSet[T]):
         raise NotImplementedError('Cannot discard from FrozenOrderedSet')
 
     def intersection(self, s: Iterable[Any]) -> 'FrozenOrderedSet[T]':
-        return FrozenOrderedSet(frozendict({e: None for e in self.the_dict if e in s}))
+        return self(frozendict({e: None for e in self.the_dict if e in s}))
 
     def intersection_update(self, s: Iterable[Any]) -> None:
-        self.the_dict = FrozenOrderedSet(frozendict(
+        self.the_dict = self(frozendict(
             {e: None for e in self.the_dict if e in s}))
 
     def pop(self) -> T:
@@ -267,7 +273,7 @@ class FrozenOrderedSet(OrderedSet[T]):
         raise NotImplementedError('Cannot remove from FrozenOrderedSet')
 
     def symmetric_difference(self, s: Iterable[T]) -> 'FrozenOrderedSet[T]':
-        return FrozenOrderedSet(
+        return self(
             frozendict.fromkeys([e for e in self.the_dict if e not in s] +
                                 [e for e in s if e not in self.the_dict]))
 
@@ -275,7 +281,7 @@ class FrozenOrderedSet(OrderedSet[T]):
         raise NotImplementedError('Cannot update FrozenOrderedSet')
 
     def union(self, s: Iterable[T]) -> 'FrozenOrderedSet[T]':
-        return FrozenOrderedSet(frozendict({**self.the_dict, **dict.fromkeys(s)}))
+        return self(frozendict({**self.the_dict, **dict.fromkeys(s)}))
 
     def update(self, s: Iterable[T]) -> None:
         raise NotImplementedError('Cannot update FrozenOrderedSet')
