@@ -221,7 +221,7 @@ class OrderedSet(Set[T], Generic[T]):
 
 
 class FrozenOrderedSet(OrderedSet[T]):
-    def __init__(self, base: Union[Dict[T, None], Iterable[T]]):
+    def __init__(self, base: Optional[Union[Dict[T, None], Iterable[T]]] = None):
         super().__init__()
         self.the_dict: frozendict[T, None]
         if not base:
